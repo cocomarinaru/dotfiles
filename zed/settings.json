@@ -1,0 +1,114 @@
+{
+  "ui_font_family": "Hack",
+  "vim_mode": false,
+  "hard_tabs": false,
+  "tab_size": 2,
+  "vim": {
+    "toggle_relative_line_numbers": true,
+  },
+  // nvim: ignorecase + smartcase (search is case-insensitive unless you type a capital)
+  "use_smartcase_search": true,
+  // nvim: scrolloff = 10 (keep 10 lines visible above/below the cursor)
+  "vertical_scroll_margin": 10,
+  // nvim: list/listchars (show trailing spaces)
+  "show_whitespaces": "trailing",
+  "accessible_mode": false,
+  "cli_default_open_behavior": "new_window",
+  "agent_servers": {
+    "claude-acp": {
+      "type": "registry",
+    },
+  },
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false,
+    "anthropic_retention": false,
+  },
+  "session": {
+    "trust_all_worktrees": true,
+  },
+  "icon_theme": "Catppuccin Mocha",
+  "base_keymap": "JetBrains",
+  "ui_font_size": 15.0,
+  "buffer_font_family": "Menlo",
+  "buffer_font_size": 14.0,
+  "format_on_save": "off",
+  "autosave": "on_focus_change",
+  "inlay_hints": {
+    "enabled": true,
+  },
+  "show_wrap_guides": true,
+  "wrap_guides": [80],
+  "languages": {
+    "Java": {
+      "format_on_save": "off",
+      "formatter": "language_server",
+      "prettier": {
+        "allowed": false,
+      },
+    },
+  },
+  "lsp": {
+    "jdtls": {
+      "initialization_options": {
+        "settings": {
+          "java": {
+            "jdt": {
+              "ls": {
+                "lombokSupport": {
+                  "enabled": true,
+                },
+              },
+            },
+            "configuration": {
+              "updateBuildConfiguration": "automatic",
+              "runtimes": [
+                {
+                  "name": "JavaSE-25",
+                  "path": "/Users/ovidiu.sabou/.sdkman/candidates/java/current",
+                  "default": true,
+                },
+              ],
+            },
+            "maven": {
+              "downloadSources": true,
+            },
+            "import": {
+              "maven": {
+                "enabled": true,
+              },
+              "gradle": {
+                "enabled": false,
+              },
+              "exclusions": [
+                "**/node_modules/**",
+                "**/.git/**",
+                "**/target/**",
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
+  "theme": "Catppuccin Latte - No Italics",
+  "project_panel": {
+    "dock": "left",
+  },
+  "outline_panel": {
+    "dock": "left",
+  },
+  "git_panel": {
+    "tree_view": true,
+    "dock": "left",
+  },
+  "collaboration_panel": {
+    "dock": "left",
+  },
+  "agent": {
+    "dock": "left",
+  },
+  "debugger": {
+    "dock": "left",
+  },
+}

@@ -1,0 +1,7 @@
+#theme 
+theme = "Catppuccin Mocha"
+font-size = 14
+font-family = "Hack"
+adjust-cell-height = 4
+window-padding-x = 10
+window-padding-y = 8

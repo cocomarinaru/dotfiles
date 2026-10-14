@@ -1,0 +1,55 @@
+[
+  {
+    "context": "Editor",
+    "bindings": {
+      // IntelliJ: Reformat Code (formats the selection, or the whole file if nothing is selected)
+      "cmd-alt-l": "editor::FormatSelections",
+      // IntelliJ: Reformat File (always the whole file)
+      "cmd-alt-shift-l": "editor::Format",
+      // IntelliJ: Rename (renames a symbol everywhere in the project)
+      "shift-f6": "editor::Rename",
+      // IntelliJ: Optimize Imports (sorts imports, removes unused ones)
+      "ctrl-alt-o": "editor::OrganizeImports",
+      // IntelliJ: Auto-Indent Lines (fixes leading indentation only; handled by Zed, not jdtls)
+      "cmd-alt-i": "editor::AutoIndent",
+
+      // The five below all open the code actions menu; pick the matching entry.
+      // Zed can't jump straight to one refactoring yet (see zed-industries/zed PR #59154).
+
+      // IntelliJ: Show Context Actions (quick fixes such as "Import class")
+      "alt-enter": "editor::ToggleCodeActions",
+      // IntelliJ: Extract Variable -> pick "Extract to local variable"
+      "cmd-alt-v": "editor::ToggleCodeActions",
+      // IntelliJ: Extract Constant -> pick "Extract to constant"
+      "cmd-alt-c": "editor::ToggleCodeActions",
+      // IntelliJ: Extract Field -> pick "Extract to field"
+      "cmd-alt-f": "editor::ToggleCodeActions",
+      // IntelliJ: Extract Method -> pick "Extract to method"
+      "cmd-alt-m": "editor::ToggleCodeActions",
+      // IntelliJ: Inline -> pick "Inline local variable / constant / method"
+      "cmd-alt-n": "editor::ToggleCodeActions"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      // Toggle Vim mode on/off (flips "vim_mode" in settings.json)
+      "alt-shift-v": "workspace::ToggleVimMode"
+    }
+  },
+  {
+    "context": "vim_mode == normal && !menu",
+    "bindings": {
+      // nvim: grd - go to definition
+      "g r d": "editor::GoToDefinition",
+      // nvim: grt - go to type definition
+      "g r t": "editor::GoToTypeDefinition",
+      // nvim: gW - search symbols in the whole project
+      "g shift-w": "project_symbols::Toggle",
+      // nvim: <leader>sf - find files
+      "space s f": "file_finder::Toggle",
+      // nvim: <leader>sg - search text in the project
+      "space s g": "pane::DeploySearch"
+    }
+  }
+]

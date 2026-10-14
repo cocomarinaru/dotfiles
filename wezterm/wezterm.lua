@@ -1,34 +1,31 @@
--- Pull in the wezterm API
-local wezterm = require("wezterm")
-
--- This will hold the configuration.
+local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
-config.font = wezterm.font("Hack Nerd Font Mono", { weight = "Regular", stretch = "Normal", style = "Normal" })
-config.font_size = 16
-config.line_height = 1.1
+-- Theme (Ghostty: theme = "Catppuccin Mocha")
+config.color_scheme = 'Catppuccin Mocha'
 
--- config.color_scheme = "Tokyo Night"
--- config.color_scheme = "matrix"
--- config.color_scheme = "Matrix (terminal.sexy)"
-config.color_scheme = "Catppuccin Mocha"
--- config.color_scheme = "Solarized Dark Higher Contrast"
+-- Font (Ghostty: font-family = "Hack", font-size = 16)
+config.font = wezterm.font 'Hack'
+config.font_size = 14
 
-config.automatically_reload_config = true
+-- Line height (Ghostty: adjust-cell-height = 4, i.e. 4 extra pixels per line).
+-- WezTerm uses a multiplier instead of pixels; 1.2 is roughly 4px on a 16pt Hack cell.
+config.line_height = 1.2
 
--- Adding keybindings to match iTerm’s pane splits with Super key
-config.keys = {
-	-- Vertical split (Cmd+D in iTerm)
-	{ key = "d", mods = "SUPER", action = wezterm.action({ SplitHorizontal = { domain = "CurrentPaneDomain" } }) },
-	-- Horizontal split (Cmd+Shift+D in iTerm)
-	{ key = "D", mods = "SUPER|SHIFT", action = wezterm.action({ SplitVertical = { domain = "CurrentPaneDomain" } }) },
+-- Window padding (Ghostty: window-padding-x = 10, window-padding-y = 8)
+config.window_padding = {
+  left = 10,
+  right = 10,
+  top = 8,
+  bottom = 8,
 }
 
--- config.enable_tab_bar = false
-
--- config.window_decorations = "RESIZE"
-
-config.window_background_opacity = 0.9
-config.macos_window_background_blur = 10
+-- Split panes
+config.keys = {
+  -- Cmd+D: new pane to the right (side by side)
+  { key = 'd', mods = 'CMD', action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+  -- Cmd+Shift+D: new pane below (stacked)
+  { key = 'd', mods = 'CMD|SHIFT', action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' } },
+}
 
 return config
