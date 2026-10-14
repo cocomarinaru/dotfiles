@@ -1,0 +1,7 @@
+WRN 2026-06-29T10:43:01.205 ?.33163    server_start:197: Failed to start server: operation not permitted: /tmp/claude-502/nvim.ovidiu.sabou/47lpBi/nvim.33163.0
+WRN 2026-06-29T10:43:18.435 ?.33178    server_start:197: Failed to start server: operation not permitted: /tmp/claude-502/nvim.ovidiu.sabou/PYUDv9/nvim.33178.0
+WRN 2026-06-29T10:43:26.043 ?.33187    server_start:197: Failed to start server: operation not permitted: /tmp/claude-502/nvim.ovidiu.sabou/k1gg3p/nvim.33187.0
+WRN 2026-06-29T10:44:18.358 ?.33235    server_start:197: Failed to start server: operation not permitted: /tmp/claude-502/nvim.ovidiu.sabou/EFn1zF/nvim.33235.0
+WRN 2026-09-21T13:00:26.741 ?.75466    server_start:197: Failed to start server: operation not permitted: /tmp/claude-502/nvim.ovidiu.sabou/uOcvLA/nvim.75466.0
+WRN 2026-09-21T13:00:26.820 ?.75470    server_start:197: Failed to start server: operation not permitted: /tmp/claude-502/nvim.ovidiu.sabou/k38NCf/nvim.75470.0
+WRN 2026-09-21T13:06:36.638 ?.77423    server_start:197: Failed to start server: operation not permitted: /tmp/claude-502/nvim.ovidiu.sabou/atv19C/nvim.77423.0

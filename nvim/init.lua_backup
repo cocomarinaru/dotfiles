@@ -1,0 +1,12 @@
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.hlsearch = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.expandtab = true
+vim.opt.clipboard = "unnamedplus"
+
+vim.keymap.set('n', '<Up>', '<Nop>')
+vim.keymap.set('n', '<Down>', '<Nop>')
+vim.keymap.set('n', '<Left>', '<Nop>')
+vim.keymap.set('n', '<Right>', '<Nop>')
