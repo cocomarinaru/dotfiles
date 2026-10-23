@@ -85,6 +85,10 @@ do
   -- instead raise a dialog asking if you wish to save the current file(s)
   -- See `:help 'confirm'`
   vim.o.confirm = true
+
+  -- Keep all folds open when a file is opened (folds are treesitter based, see SECTION 9)
+  vim.o.foldlevel = 99
+  vim.o.foldlevelstart = 99
 end
 
 -- ============================================================
@@ -278,6 +282,9 @@ do
       { 'gr', group = 'LSP Actions', mode = { 'n' } },
       { '<leader>g', group = '[G]it (lazygit)' },
       { 'gs', group = '[S]urround', mode = { 'n', 'v' } },
+      { '<leader>j', group = '[J]ava', mode = { 'n', 'v' } },
+      { '<leader>d', group = '[D]ebug' },
+      { '<leader>r', group = '[R]ust', mode = { 'n' } },
     },
   }
 
@@ -623,9 +630,6 @@ do
 
     stylua = {}, -- Used to format Lua code
 
-    -- Java language server (Eclipse JDT LS). Mason installs it; it needs a JDK on PATH to run.
-    jdtls = {},
-
     -- TypeScript / React projects (e.g. ibis). All of these are Node programs, so
     -- `node` must be on PATH when Neovim starts (nvm must be loaded in the shell).
     ts_ls = {}, -- TypeScript language server; uses the project's own node_modules/typescript
@@ -690,10 +694,14 @@ do
   vim.list_extend(ensure_installed, {
     -- You can add other tools here that you want Mason to install
     'prettier', -- Fallback formatter; conform prefers the project's node_modules/.bin/prettier when present
+    -- Java. jdtls is started from ftplugin/java.lua via nvim-jdtls, not from the loop below.
+    'jdtls', -- Java language server (Eclipse JDT LS); needs a JDK on PATH
+    'java-debug-adapter', -- debugger plugin for jdtls
+    'java-test', -- JUnit test runner plugin for jdtls
+    'codelldb', -- Rust debugger backend; rustaceanvim auto-detects it
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
   for name, server in pairs(servers) do
     vim.lsp.config(name, server)
     vim.lsp.enable(name)
@@ -709,21 +717,6 @@ do
   vim.pack.add { gh 'stevearc/conform.nvim' }
   require('conform').setup {
     notify_on_error = false,
-    format_on_save = function(bufnr)
-      -- You can specify filetypes to autoformat on save here:
-      local enabled_filetypes = {
-        -- lua = true,
-        -- python = true,
-        javascript = true,
-        typescript = true,
-        typescriptreact = true,
-      }
-      if enabled_filetypes[vim.bo[bufnr].filetype] then
-        return { timeout_ms = 500 }
-      else
-        return nil
-      end
-    end,
     default_format_opts = {
       lsp_format = 'fallback', -- Use external formatters if configured below, otherwise use LSP formatting. Set to `false` to disable LSP formatting entirely.
     },
@@ -733,7 +726,7 @@ do
       typescript = { 'prettier' },
       typescriptreact = { 'prettier' },
       json = { 'prettier' },
-      -- rust = { 'rustfmt' },
+      rust = { 'rustfmt' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --
@@ -820,7 +813,7 @@ do
     -- the rust implementation via `'prefer_rust_with_warning'`
     --
     -- See `:help blink-cmp-config-fuzzy` for more information
-    fuzzy = { implementation = 'lua' },
+    fuzzy = { implementation = 'prefer_rust_with_warning' },
 
     -- Shows a signature help window while you type arguments for a function
     signature = { enabled = true },
@@ -875,8 +868,8 @@ do
 
     -- Enable treesitter based folds
     -- For more info on folds see `:help folds`
-    -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-    -- vim.wo.foldmethod = 'expr'
+    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    vim.wo.foldmethod = 'expr'
 
     -- Check if treesitter indentation is available for this language, and if so enable it
     -- in case there is no indent query, the indentexpr will fallback to the vim's built in one
@@ -928,13 +921,12 @@ do
   require 'kickstart.plugins.indent_line'
   -- require 'kickstart.plugins.lint'
   require 'kickstart.plugins.autopairs'
-  require 'kickstart.plugins.neo-tree'
   require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --
   --  Add your plugins to `lua/custom/plugins/*.lua`; every file there is loaded automatically.
-  --  Currently: navigation.lua (harpoon, mini.files, yazi.nvim), git.lua (lazygit.nvim)
+  --  Currently: navigation.lua (harpoon, mini.files, flash.nvim), git.lua (lazygit.nvim)
   require 'custom.plugins'
 end
 

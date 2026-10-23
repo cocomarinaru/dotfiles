@@ -1,8 +1,7 @@
 -- Navigation plugins: harpoon (working-set bookmarks), mini.files (directory
--- buffer), yazi.nvim (terminal file manager in a floating window).
+-- buffer), flash.nvim (jump labels).
 --
 -- Telescope (<leader>sf) remains the main way to find a file by name.
--- Neo-tree stays available on `\` for the occasional structure overview.
 
 -- [[ harpoon ]] https://github.com/ThePrimeagen/harpoon (harpoon2 branch)
 -- Mark a handful of files per project and jump to them with one key each.
@@ -35,22 +34,6 @@ vim.keymap.set('n', '-', function()
   local path = vim.fn.filereadable(buf_name) == 1 and buf_name or vim.fn.getcwd()
   MiniFiles.open(path)
 end, { desc = 'Open mini.files at current file' })
-
--- [[ yazi.nvim ]] https://github.com/mikavilpas/yazi.nvim
--- Embeds the `yazi` terminal file manager (installed via Homebrew) in a float.
--- Requires the `yazi` binary on PATH. Run `:checkhealth yazi` if it fails to open.
-vim.pack.add { { src = 'https://github.com/mikavilpas/yazi.nvim', version = vim.version.range '*' } }
-
-require('yazi').setup {
-  -- Keep neo-tree / netrw behaviour untouched when opening a directory
-  open_for_directories = false,
-  keymaps = {
-    show_help = '<F1>',
-  },
-}
-
-vim.keymap.set('n', '<leader>y', '<Cmd>Yazi<CR>', { desc = 'Open [Y]azi at current file' })
-vim.keymap.set('n', '<leader>Y', '<Cmd>Yazi cwd<CR>', { desc = 'Open [Y]azi at working directory' })
 
 -- [[ flash.nvim ]] https://github.com/folke/flash.nvim
 -- Jump anywhere on screen: press `s`, type 1-2 characters, press the label

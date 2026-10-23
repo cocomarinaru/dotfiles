@@ -7,11 +7,13 @@ Config layout:
 | File | Contents |
 |---|---|
 | `init.lua` | Options, core keymaps, plugin manager, UI, Telescope, LSP, formatting, completion, treesitter |
-| `lua/kickstart/plugins/*.lua` | gitsigns keymaps, neo-tree, autopairs, indent guides |
-| `lua/custom/plugins/navigation.lua` | harpoon, mini.files, yazi.nvim, flash.nvim |
+| `lua/kickstart/plugins/*.lua` | gitsigns keymaps, autopairs, indent guides |
+| `lua/custom/plugins/navigation.lua` | harpoon, mini.files, flash.nvim |
 | `lua/custom/plugins/git.lua` | lazygit.nvim |
+| `lua/custom/plugins/java.lua` | nvim-jdtls, nvim-dap, nvim-dap-ui, debug keymaps |
+| `ftplugin/java.lua` | Starts jdtls per Java buffer (Lombok, tests, debugger), Java keymaps |
 
-Useful commands: `:Mason` (installed tools), `:checkhealth`, `:lua vim.pack.update()` (update plugins).
+Useful commands: `:Mason` (installed tools), `:checkhealth`, `:checkhealth vim.lsp` (attached servers), `:lua vim.pack.update()` (update plugins).
 
 ---
 
@@ -25,11 +27,15 @@ Fuzzy finder for files, text, help and LSP results.
 | `Space s f` | Find files |
 | `Space s g` | Live grep in project |
 | `Space s w` | Grep word under cursor |
+| `Space s /` | Live grep in open files only |
 | `Space Space` | Open buffers |
 | `Space /` | Fuzzy search in current buffer |
 | `Space s r` | Resume last search |
+| `Space s .` | Recent files |
+| `Space s d` | Diagnostics of whole project |
 | `Space s h` | Search help |
 | `Space s k` | Search keymaps |
+| `Space s c` | Search commands |
 | `Space s n` | Search Neovim config files |
 
 ### harpoon
@@ -48,36 +54,25 @@ Jump anywhere on screen with labels.
 | Key | Action |
 |---|---|
 | `s` + 1–2 chars + label | Jump to match |
-| `S` | Select a syntax node (expression, block, JSX element) |
+| `S` | Select a syntax node (expression, block, method) |
 | `f` / `t` | Enhanced: labels every match on the line |
 | `Ctrl+s` (while typing `/`) | Toggle labels in search |
 
 ### mini.files
-Column-style directory browser you edit like text.
+Column-style directory browser you edit like text. Changes hit disk only after `=`.
 
 | Key | Action |
 |---|---|
 | `-` | Open at current file |
-| `Enter` | Open file / enter folder |
-| `-` (inside) | Go up one level |
-| `=` | Apply renames, deletes, creations to disk |
+| `Enter` / `l` | Open file / enter folder |
+| `-` / `h` (inside) | Go up one level |
+| `o` + name | Create file; end with `/` for a folder |
+| edit line | Rename |
+| `dd` / `p` | Cut / paste (move) |
+| `yy` / `p` | Copy / paste |
+| `=` | Apply pending changes to disk |
 | `q` | Close |
-
-### yazi.nvim
-The yazi terminal file manager in a floating window.
-
-| Key | Action |
-|---|---|
-| `Space y` | Open at current file |
-| `Space Y` | Open at working directory |
-| `F1` (inside) | Help |
-
-### neo-tree.nvim
-Classic sidebar tree. Closed by default.
-
-| Key | Action |
-|---|---|
-| `\` | Toggle tree |
+| `g?` | Show all keys |
 
 ---
 
@@ -91,10 +86,16 @@ Change markers in the gutter and hunk operations. A hunk is one block of changed
 | `]c` / `[c` | Next / previous hunk |
 | `Space h s` | Stage hunk |
 | `Space h r` | Reset hunk |
+| `Space h S` / `Space h R` | Stage / reset whole buffer |
 | `Space h p` | Preview hunk |
+| `Space h i` | Preview hunk inline |
 | `Space h b` | Blame current line |
 | `Space h d` | Diff file against index |
+| `Space h D` | Diff file against last commit |
+| `Space h q` / `Space h Q` | Hunks of file / repo into quickfix |
 | `Space t b` | Toggle inline blame |
+| `Space t w` | Toggle word diff |
+| `ih` | Text object: select hunk |
 
 ### lazygit.nvim
 Full git terminal UI in a floating window.
@@ -111,45 +112,90 @@ Full git terminal UI in a floating window.
 ## Code intelligence
 
 ### LSP (nvim-lspconfig, mason.nvim, mason-lspconfig, mason-tool-installer)
-Language servers, installed automatically by Mason:
-`lua_ls`, `jdtls` (Java), `ts_ls` (TypeScript), `eslint`, `jsonls`, `yamlls`, `dockerls`.
+Language servers, installed by Mason:
+`lua_ls`, `ts_ls` (TypeScript), `eslint`, `jsonls`, `yamlls`, `dockerls`.
+`jdtls` (Java) is also installed by Mason but started by nvim-jdtls, see Java below.
 
 | Key | Action |
 |---|---|
+| `K` | Hover: docs and type of symbol under cursor |
 | `grd` | Go to definition |
+| `grD` | Go to declaration |
 | `grr` | References |
 | `gri` | Implementation |
 | `grt` | Type definition |
-| `grn` | Rename |
-| `gra` | Code action |
-| `gO` | Document symbols |
-| `gW` | Workspace symbols |
-| `K` | Hover documentation |
+| `grn` | Rename across project |
+| `gra` | Code action (normal and visual) |
+| `gO` | Symbols in current file |
+| `gW` | Symbols across workspace |
 | `Ctrl+t` | Jump back after go-to |
-| `]d` / `[d` | Next / previous diagnostic |
-| `Space q` | Diagnostics list |
+| `]d` / `[d` | Next / previous diagnostic, opens message float |
+| `Space q` | Diagnostics of current file in a list |
+| `Space s d` | Diagnostics of project in Telescope |
 | `Space t h` | Toggle inlay hints |
+| `Ctrl+s` (insert) | Signature help |
+
+### Java (nvim-jdtls)
+Extra Java features on top of LSP. Only in Java buffers. Lombok is loaded, so
+generated getters, setters, builders and `@Slf4j` loggers resolve.
+
+| Key | Action |
+|---|---|
+| `Space j t` | Run test method under cursor |
+| `Space j T` | Run all tests in class |
+| `Space j o` | Organize imports |
+| `Space j v` | Extract variable (normal or visual) |
+| `Space j c` | Extract constant (normal or visual) |
+| `Space j m` | Extract method (visual) |
+
+Tests run through the debug adapter: the debug UI opens with console output,
+a summary appears when done, failures go to the quickfix list (`:copen`).
+Breakpoints set before the run are hit.
+
+### Debugger (nvim-dap, nvim-dap-ui)
+Works in any language with an adapter; Java is configured.
+For Quarkus: run `./mvnw quarkus:dev`, then `Space d c` and pick "Attach to Quarkus dev (port 5005)".
+
+| Key | Action |
+|---|---|
+| `Space d b` | Toggle breakpoint |
+| `Space d B` | Breakpoint with condition |
+| `Space d c` | Start / continue (asks which config the first time) |
+| `Space d i` | Step into |
+| `Space d o` | Step over |
+| `Space d O` | Step out |
+| `Space d q` | Quit session |
+| `Space d u` | Toggle UI panels |
+| `Space d r` | Toggle REPL (evaluate expressions) |
 
 ### blink.cmp + LuaSnip
 Autocompletion and snippets.
 
 | Key | Action |
 |---|---|
-| `Ctrl+y` | Accept completion |
+| `Ctrl+y` | Accept completion (auto-imports) |
 | `Ctrl+n` / `Ctrl+p` | Next / previous item |
 | `Ctrl+space` | Open menu, or docs if open |
 | `Ctrl+e` | Close menu |
+| `Ctrl+k` | Toggle signature help |
 | `Tab` / `Shift+Tab` | Move between snippet fields |
 
 ### conform.nvim
-Formatting. stylua for Lua, prettier for JS, TS, TSX, JSON. Format-on-save is on for JS and TS files.
+Formatting on demand only. stylua for Lua, prettier for JS, TS, TSX, JSON, the language server otherwise.
 
 | Key | Action |
 |---|---|
-| `Space f` | Format buffer |
+| `Space f` | Format whole file |
+| `Space f` (visual) | Format selected lines only |
 
 ### fidget.nvim, nvim-treesitter
-LSP progress widget; syntax highlighting and indentation. No keys.
+LSP progress widget; syntax highlighting, indentation and folds. Folds are open when a file opens.
+
+| Key | Action |
+|---|---|
+| `za` | Toggle fold under cursor |
+| `zM` / `zR` | Close / open all folds |
+| `zc` / `zo` | Close / open one level |
 
 ---
 
