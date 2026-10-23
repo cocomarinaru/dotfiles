@@ -1,0 +1,6 @@
+[language-server.jdtls]
+command = "jdtls"
+args = [
+  "-data", "/Users/ovidiu.sabou/.cache/helix-jdtls",
+  "--jvm-arg=-javaagent:/Users/ovidiu.sabou/.config/helix/lombok.jar",
+]
